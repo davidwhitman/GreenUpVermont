@@ -32,7 +32,7 @@ export function teamReducers(state = initialState, action) {
                 ...state,
                 selectedTeam: action.team
             };
-        case types.FETCH_TEAMS_SUCCESS :
+        case types.FETCH_TEAMS_SUCCESS:
             return {
                 ...state,
                 teams: action.teams

@@ -139,21 +139,22 @@ class MyTeams extends Component {
         member => member.uid === this.props.currentUser.uid
       );
 
-        switch (true) {
-            case status === TeamMember.memberStatuses.INVITED:
-                nextScreen = 'TeamInvitationDetails';
-                break;
-            case currentUserIsTeamOwner(team, this.props.currentUser):
-                nextScreen = 'TeamEditor';
-                break;
-            default:
-                nextScreen = 'TeamDetails';
-                break;
-        }
-        return () => {
-            this.props.actions.selectTeam(key);
-            this.props.navigation.navigate(nextScreen);
-        };
+      switch (true) {
+          case status === TeamMember.memberStatuses.INVITED:
+              nextScreen = 'TeamInvitationDetails';
+              break;
+          case currentUserIsTeamOwner(team, this.props.currentUser):
+              nextScreen = 'TeamEditor';
+              break;
+          default:
+              nextScreen = 'TeamDetails';
+              break;
+      }
+
+      return () => {
+          this.props.actions.selectTeam(team);
+          this.props.navigation.navigate(nextScreen);
+      };
     }
 
     toNewTeamEditor() {
