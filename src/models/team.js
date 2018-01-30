@@ -1,8 +1,8 @@
 // @flow
 
-import {isDate} from '../libs/isDate';
-import {Location} from './location';
-import {TeamMember} from './team-member';
+import { isDate } from '../libs/isDate';
+import { Location } from './location';
+import { TeamMember } from './team-member';
 
 export default class Team {
     id: string;

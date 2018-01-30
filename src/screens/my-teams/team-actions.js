@@ -58,7 +58,9 @@ export function sendTeamMessage(team, message) {
 }
 
 export function selectTeam(team) {
-    return {type: types.SELECT_TEAM, team};
+    console.log('selecting team')
+    console.log(team)
+    return {type: types.SELECT_TEAM, team: {...team }};
 }
 
 export function saveTeam(team, id) {

@@ -25,6 +25,7 @@ import {vermontTowns} from '../../libs/vermont-towns';
 import Team from '../../models/team';
 import {TeamMember} from '../../models/team-member';
 import {isDate} from '../../libs/isDate';
+import { selectTeam } from './team-actions';
 
 const styles = StyleSheet.create({
     scrollView: {
@@ -67,6 +68,8 @@ class TeamEditorDetails extends Component {
 
     constructor(props) {
         super(props);
+        this.selectedTeam
+
         this.options = [
             {
                 label: 'Public',
@@ -76,6 +79,7 @@ class TeamEditorDetails extends Component {
                 value: 'private'
             }
         ];
+
         this.setTeamValue = this.setTeamValue.bind(this);
         this.setSelectedOption = this.setSelectedOption.bind(this);
         this.saveTeam = this.saveTeam.bind(this);
@@ -85,18 +89,18 @@ class TeamEditorDetails extends Component {
         };
     }
 
-    componentWillMount() {
+    // componentWillMount() {
 
-        const selectedTeam = typeof this.props.selectedTeamId === 'string' ? this.props.teams[this.props.selectedTeamId] : createNewTeam(this.props.currentUser);
-        this.setState({selectedTeam});
-    }
+    //     const selectedTeam = typeof this.props.selectedTeamId === 'string' ? this.props.teams[this.props.selectedTeamId] : createNewTeam(this.props.currentUser);
+    //     this.setState({selectedTeam});
+    // }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.selectedTeamId !== this.props.selectedTeamId) {
-            const selectedTeam = typeof nextProps.selectedTeamId === 'string' ? nextProps.teams[nextProps.selectedTeamId] : createNewTeam(nextProps.currentUser);
-            this.setState({selectedTeam});
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.selectedTeamId !== this.props.selectedTeamId) {
+    //         const selectedTeam = typeof nextProps.selectedTeamId === 'string' ? nextProps.teams[nextProps.selectedTeamId] : createNewTeam(nextProps.currentUser);
+    //         this.setState({selectedTeam});
+    //     }
+    // }
 
     setSelectedOption(option) {
         this.setState({selectedOption: option});
@@ -110,12 +114,20 @@ class TeamEditorDetails extends Component {
         let newState = {};
         return (value) => {
             newState[key] = value;
-            this.setState({selectedTeam: Object.assign({}, this.state.selectedTeam, newState)});
+            //this.setState({selectedTeam: Object.assign({}, this.state.selectedTeam, newState)});
         };
     }
 
     render() {
-       const selectedTeam = !!this.props.selectedTeamId ? this.props.teams[this.props.selectedTeamId] : Team.create();
+        const { selectedTeam } = this.props;
+        // console.log(this.props);
+        console.log(selectedTeam);
+
+        // if(!selectedTeam) {
+        //     const { newTeam }  = Team.create();
+        //     selectedTeam = Team.create();
+        // }
+
         return (
             <ScrollView
                 automaticallyAdjustContentInsets={false}
@@ -125,12 +137,12 @@ class TeamEditorDetails extends Component {
                     <Text style={styles.label}>Team Name:</Text>
                     <TextInput
                         keyBoardType={'default'}
-                        onChangeText={this.setTeamValue('name')}
+                        onChangeText={(text)=>selectedTeam.name = text}
                         placeholder={'Team Name'}
                         style={{
                             width: '80%'
                         }}
-                        value={this.state.selectedTeam.name}/>
+                        value={selectedTeam.name}/>
                 </View>
                 <SegmentedControls
                     options={this.options}
@@ -142,8 +154,8 @@ class TeamEditorDetails extends Component {
                 <View style={styles.column}>
                     <Text style={styles.label}>Clean Up Location:</Text>
                     <Picker
-                        selectedValue={this.state.town}
-                        onValueChange={(itemValue) => this.setState({town: itemValue})}>
+                        selectedValue={selectedTeam.town}
+                        onValueChange={(itemValue) => selectedTeam.town = itemValue}>
                         {vermontTowns.map(town => (<Picker.Item key={town} label={town} value={town}/>))}
                     </Picker>
                 </View>
@@ -180,8 +192,9 @@ class TeamEditorDetails extends Component {
 function mapStateToProps(state) {
     const currentUser = state.loginReducer.user;
     const teams = state.teamReducers.teams;
-    const selectedTeamId = state.teamReducers.selectedTeamId;
-    return {selectedTeamId, teams, currentUser};
+    const selectedTeam = state.teamReducers.selectedTeam;
+
+    return { selectedTeam, teams, currentUser };
 }
 
 function mapDispatchToProps(dispatch) {
