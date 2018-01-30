@@ -13,7 +13,7 @@ import {
     TextInput
 } from 'react-native';
 import {Message} from '../../models/message';
-
+import Team from '../../models/team';
 import {TeamMember} from '../../models/team-member';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import * as teamActions from './team-actions';
@@ -158,7 +158,10 @@ class MyTeams extends Component {
     }
 
     toNewTeamEditor() {
-        this.props.actions.selectTeam();
+        const owner = TeamMember.create(Object.assign({}, this.props.currentUser, {memberStatus: TeamMember.memberStatuses.ACCEPTED}));
+        const members = [owner];
+        const team = Team.create({owner, members});
+        this.props.actions.selectTeam(team);
         this.props.navigation.navigate('TeamEditor');
     }
 

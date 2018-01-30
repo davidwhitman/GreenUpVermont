@@ -24,21 +24,17 @@ export default class Team {
         this.name = typeof args.name === 'string'
             ? args.name
             : null;
-        this.town = typeof args.location === 'string'
+        this.town = typeof args.town === 'string'
             ? args.town
             : null;
         this.description = typeof args.descrption === 'string'
             ? args.description
             : null;
-        this.notes = Array.isArray(args.notes)
-            ? args.notes.filter(note => typeof note === 'string')
+        this.notes = typeof args.notes === 'string'
+            ? args.notes
             : null;
-        this.start = isDate(args.start)
-            ? new Date(args.start)
-            : null;
-        this.end = isDate(args.end)
-            ? new Date(args.end)
-            : null;
+        this.start = args.start || null;
+        this.end = args.end || null;
         this.active = typeof args.active === 'boolean'
             ? args.active
             : true;
@@ -55,7 +51,6 @@ export default class Team {
             ? new Date(args.created)
             : new Date();
         this.owner = TeamMember.create(args.owner);
-
     }
 
     static create(args = {}, id) {
@@ -64,5 +59,4 @@ export default class Team {
         }
         return new Team(args);
     }
-
 }
