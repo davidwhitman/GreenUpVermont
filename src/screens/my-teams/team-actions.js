@@ -58,13 +58,11 @@ export function sendTeamMessage(team, message) {
 }
 
 export function selectTeam(team) {
-    console.log('selecting team')
-    console.log(team)
     return {type: types.SELECT_TEAM, team: {...team }};
 }
 
 export function saveTeam(team, id) {
-    return async function (dispatch) {
+    return async function (dispatch) {      
         const savedTeam = await firebaseDataLayer.saveTeam(team, id);
         dispatch({type: types.SAVE_TEAM_SUCCESS, savedTeam});
     };
