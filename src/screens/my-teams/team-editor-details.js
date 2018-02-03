@@ -10,11 +10,9 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableHighlight,
     View,
     Picker,
-    ScrollView,
-    FlatList
+    ScrollView
 } from 'react-native';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import * as teamActions from './team-actions';
@@ -22,10 +20,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {SegmentedControls} from 'react-native-radio-buttons';
 import {vermontTowns} from '../../libs/vermont-towns';
-import Team from '../../models/team';
-import {TeamMember} from '../../models/team-member';
-import {isDate} from '../../libs/isDate';
-import { selectTeam } from './team-actions';
 
 const styles = StyleSheet.create({
     scrollView: {
@@ -60,10 +54,10 @@ class TeamEditorDetails extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
-                selectedTeam: {...props.selectedTeam}
-            };
+            selectedTeam: {...props.selectedTeam}
+        };
     }
 
     setSelectedOption(option) {
@@ -76,7 +70,7 @@ class TeamEditorDetails extends Component {
 
     setTeamValue(key) {
         return (value) => {
-            let newSelectedTeam = Object.assign({}, this.state.selectedTeam);
+            const newSelectedTeam = Object.assign({}, this.state.selectedTeam);
             newSelectedTeam[key] = value;
             this.setState(Object.assign({}, this.state, {selectedTeam: newSelectedTeam}));
         };
@@ -95,7 +89,7 @@ class TeamEditorDetails extends Component {
                 value: false
             }
         ];
- 
+
         return (
             <ScrollView
                 automaticallyAdjustContentInsets={false}
@@ -118,7 +112,7 @@ class TeamEditorDetails extends Component {
                     selectedOption={this.state.selectedTeam.isPublic}
                     selectedTint={'#EFEFEF'} tint={'#666666'}
                     extractText={(option) => option.label}
-                    testOptionEqual={(selectedValue, option)=>selectedValue === option.value}/>
+                    testOptionEqual={(selectedValue, option) => selectedValue === option.value}/>
 
                 <View style={styles.column}>
                     <Text style={styles.label}>Clean Up Location:</Text>
@@ -161,7 +155,7 @@ class TeamEditorDetails extends Component {
 function mapStateToProps(state) {
     const selectedTeam = state.teamReducers.selectedTeam;
 
-    return { selectedTeam };
+    return {selectedTeam};
 }
 
 function mapDispatchToProps(dispatch) {

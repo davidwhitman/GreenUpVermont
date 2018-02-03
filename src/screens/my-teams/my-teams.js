@@ -35,9 +35,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         margin: 2
     },
-  row: {
-    width: '100%',
-    flexDirection: 'row',
+    row: {
+        width: '100%',
+        flexDirection: 'row',
         paddingTop: 15,
         justifyContent: 'space-around'
     },
@@ -129,32 +129,32 @@ class MyTeams extends Component {
     }
 
     onMessageTextChange(messageText) {
-    this.setState({ messageText });
+        this.setState({messageText});
     }
 
     toTeamDetail(key: string) {
-      let nextScreen = 'TeamDetails';
-      const team = (this.props.teams || {})[key];
-      const status = (team.members || []).find(
-        member => member.uid === this.props.currentUser.uid
-      );
+        let nextScreen = 'TeamDetails';
+        const team = (this.props.teams || {})[key];
+        const status = (team.members || []).find(
+            member => member.uid === this.props.currentUser.uid
+        );
 
-      switch (true) {
-          case status === TeamMember.memberStatuses.INVITED:
-              nextScreen = 'TeamInvitationDetails';
-              break;
-          case currentUserIsTeamOwner(team, this.props.currentUser):
-              nextScreen = 'TeamEditor';
-              break;
-          default:
-              nextScreen = 'TeamDetails';
-              break;
-      }
+        switch (true) {
+            case status === TeamMember.memberStatuses.INVITED:
+                nextScreen = 'TeamInvitationDetails';
+                break;
+            case currentUserIsTeamOwner(team, this.props.currentUser):
+                nextScreen = 'TeamEditor';
+                break;
+            default:
+                nextScreen = 'TeamDetails';
+                break;
+        }
 
-      return () => {
-          this.props.actions.selectTeam(team);
-          this.props.navigation.navigate(nextScreen);
-      };
+        return () => {
+            this.props.actions.selectTeam(team);
+            this.props.navigation.navigate(nextScreen);
+        };
     }
 
     toNewTeamEditor() {
@@ -183,62 +183,62 @@ class MyTeams extends Component {
         const _myTeams = (Object.keys(teams || {}))
             .filter(
                 key => {
-                    let memberIds = ((teams[key].members || []).map(member => member.uid));
+                    const memberIds = ((teams[key].members || []).map(member => member.uid));
                     return memberIds.indexOf(this.props.currentUser.uid) !== -1;
                 }
             );
-            
+
         const myTeams = _myTeams.map(key => (
-        <TouchableHighlight key={key} onPress={this.toTeamDetail(key)}>
-          <View style={styles.row}>
-            <TouchableHighlight onPress={this.openTeamMessageModal(key)}>
-              <MaterialCommunityIcons name='message-text-outline' size={50} />
+            <TouchableHighlight key={key} onPress={this.toTeamDetail(key)}>
+                <View style={styles.row}>
+                    <TouchableHighlight onPress={this.openTeamMessageModal(key)}>
+                        <MaterialCommunityIcons name='message-text-outline' size={50} />
+                    </TouchableHighlight>
+                    <Text style={styles.teams}>{teams[key].name}</Text>
+                    <MaterialCommunityIcons name={this.toTeamIcon(teams[key])} size={50}/>
+                </View>
             </TouchableHighlight>
-            <Text style={styles.teams}>{teams[key].name}</Text>
-            <MaterialCommunityIcons name={this.toTeamIcon(teams[key])} size={50}/>
-            </View>
-        </TouchableHighlight>
         ));
         return (
-      <View style={{ flex: 1 }}>
-        <ScrollView style={{ flex: 1 }}>
-          <Text>{'My Teams'}</Text>
-          <View style={styles.row}>
-            <Button onPress={this.toTeamSearch} title='Search Teams' />
-            <Button onPress={this.toNewTeamEditor} title='New Team' />
-          </View>
-          {myTeams}
-          <Modal animationType={'slide'} transparent={false}
-          visible={this.state.isModalVisible} onRequestClose={() => {
-                        this.setState({message: '', selectedTeam: null});
-                    }}>
-            <View style={{marginTop: 22, flex: 1}}>
-              <ScrollView>
-                <View style={styles.messageRow}>
-                  <TextInput
-                    keyBoardType={'default'}
-                    multiline={true}
-                    numberOfLines={5}
-                    onChangeText={this.onMessageTextChange}
-                    placeholder={'message details'}
-                    underlineColorAndroid={'transparent'}
-                    value={this.state.messageText}
-                    style={{width: '100%', paddingTop: 30, paddingBottom: 30}}/>
-                </View>
-              </ScrollView>
-              <View style={styles.buttonRow}>
-                <TouchableHighlight style={styles.addButton} onPress={this.sendMessage}>
-                  <Text style={styles.text}>Send Message</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={styles.cancelButton} 
-                onPress={() => { this.setState({isModalVisible: false, messageText: ''});}}>
-                  <Text style={styles.text}>Cancel</Text>
-                </TouchableHighlight>
-              </View>
+            <View style={{flex: 1}}>
+                <ScrollView style={{flex: 1}}>
+                    <Text>{'My Teams'}</Text>
+                    <View style={styles.row}>
+                        <Button onPress={this.toTeamSearch} title='Search Teams' />
+                        <Button onPress={this.toNewTeamEditor} title='New Team' />
+                    </View>
+                    {myTeams}
+                    <Modal animationType={'slide'} transparent={false}
+                        visible={this.state.isModalVisible} onRequestClose={() => {
+                            this.setState({message: '', selectedTeam: null});
+                        }}>
+                        <View style={{marginTop: 22, flex: 1}}>
+                            <ScrollView>
+                                <View style={styles.messageRow}>
+                                    <TextInput
+                                        keyBoardType={'default'}
+                                        multiline={true}
+                                        numberOfLines={5}
+                                        onChangeText={this.onMessageTextChange}
+                                        placeholder={'message details'}
+                                        underlineColorAndroid={'transparent'}
+                                        value={this.state.messageText}
+                                        style={{width: '100%', paddingTop: 30, paddingBottom: 30}}/>
+                                </View>
+                            </ScrollView>
+                            <View style={styles.buttonRow}>
+                                <TouchableHighlight style={styles.addButton} onPress={this.sendMessage}>
+                                    <Text style={styles.text}>Send Message</Text>
+                                </TouchableHighlight>
+                                <TouchableHighlight style={styles.cancelButton}
+                                    onPress={() => { this.setState({isModalVisible: false, messageText: ''}); }}>
+                                    <Text style={styles.text}>Cancel</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
+                    </Modal>
+                </ScrollView>
             </View>
-          </Modal>
-        </ScrollView>
-      </View>
         );
     }
 }
